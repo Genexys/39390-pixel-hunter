@@ -1,8 +1,25 @@
 'use strict';
 
-const RIGHT_ARROW = 37;
-const LEFT_ARROW = 39;
-
+const RIGHT_ARROW = 39;
+const LEFT_ARROW = 37;
+const ARROWS_HTML = `<div class="arrows__wrap">
+<style>
+  .arrows__wrap {
+    position: absolute;
+    top: 95px;
+    left: 50%;
+    margin-left: -56px;
+  }
+  .arrows__btn {
+    background: none;
+    border: 2px solid black;
+    padding: 5px 20px;
+  }
+</style>
+<button class="arrows__btn"><-</button>
+<button class="arrows__btn">-></button>
+</div>`;
+const ARROWS = document.querySelectorAll(`.arrows__btn`);
 const central = document.querySelector(`main.central`);
 const selectSlide = (element) => {
   central.innerHTML = ``;
@@ -20,16 +37,24 @@ const selectScreen = (index) => {
   selectSlide(allScreens[current]);
 };
 
-document.addEventListener(`keydown`, (evt) => {
-  switch (evt.keyCode) {
-    case RIGHT_ARROW:
-      selectScreen(current + 1);
-      break;
-    case LEFT_ARROW:
-      selectScreen(current - 1);
-      break;
+document.body.insertAdjacentHTML(`beforeend`, ARROWS_HTML);
+
+const switchScreen = (evt) => {
+  if ((evt.type === `click` &&
+      evt.target.textContent === `->` || evt.type === `keydown` && evt.keyCode === RIGHT_ARROW)) {
+    selectScreen(current + 1);
+  } else if ((evt.type === `click` &&
+      evt.target.textContent === `<-` || evt.type === `keydown` && evt.keyCode === LEFT_ARROW)) {
+    selectScreen(current - 1);
   }
+};
+
+for (let i = 0; i < ARROWS.length; i++) {
+  ARROWS[i].addEventListener(`click`, (evt) => {
+    switchScreen(evt);
+  });
+}
+
+document.addEventListener(`keydown`, (evt) => {
+  switchScreen(evt);
 });
-
-selectScreen(0);
-
