@@ -19,7 +19,7 @@ const ARROWS_HTML = `<div class="arrows__wrap">
 <button class="arrows__btn"><-</button>
 <button class="arrows__btn">-></button>
 </div>`;
-const ARROWS = document.querySelectorAll(`.arrows__btn`);
+
 const central = document.querySelector(`main.central`);
 const selectSlide = (element) => {
   central.innerHTML = ``;
@@ -38,7 +38,7 @@ const selectScreen = (index) => {
 };
 
 document.body.insertAdjacentHTML(`beforeend`, ARROWS_HTML);
-
+const ARROWS = document.querySelectorAll(`.arrows__btn`);
 const switchScreen = (evt) => {
   if ((evt.type === `click` &&
       evt.target.textContent === `->` || evt.type === `keydown` && evt.keyCode === RIGHT_ARROW)) {
