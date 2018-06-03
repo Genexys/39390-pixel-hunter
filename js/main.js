@@ -1,33 +1,35 @@
 'use strict';
 
-const allScreen = document.querySelectorAll(`template`);
+const RIGHT_ARROW = 37;
+const LEFT_ARROW = 39;
 
-const selectScreen = (screen) => {
-  allScreen.forEach((el, index) => {
-    if (screen === index) {
-      const central = document.querySelector(`main.central`);
-      const templateScreen = el.content;
-      const screenContent = templateScreen.cloneNode(true);
-      // central.innerHTML = screenContent;
-      central.appendChild(screenContent);
-    }
-  });
+const central = document.querySelector(`main.central`);
+const selectSlide = (element) => {
+  central.innerHTML = ``;
+  central.appendChild(element.cloneNode(true));
 };
 
-let i = 0;
-document.addEventListener(`keyup`, (evt) => {
-  if (evt.keyCode === 37) {
-    if (i !== 7) {
-      selectScreen(i++);
-    } else {
-      evt.preventDefault();
-    }
+const allScreens = Array.from(document.querySelectorAll(`template`)).
+map((it) => it.content);
 
-  } else if (evt.keyCode === 39) {
-    if (i !== 0) {
-      selectScreen(i--);
-    } else {
-      evt.preventDefault();
-    }
+let current = 0;
+const selectScreen = (index) => {
+  index = index < 0 ? allScreens.length - 1 : index;
+  index = index >= allScreens.length ? 0 : index;
+  current = index;
+  selectSlide(allScreens[current]);
+};
+
+document.addEventListener(`keydown`, (evt) => {
+  switch (evt.keyCode) {
+    case RIGHT_ARROW:
+      selectScreen(current + 1);
+      break;
+    case LEFT_ARROW:
+      selectScreen(current - 1);
+      break;
   }
 });
+
+selectScreen(0);
+
